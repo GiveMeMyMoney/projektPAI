@@ -26,6 +26,7 @@ if($records) {
         $wiersz = $records->fetch_assoc();  //tworzenie tablicy asocjacyjnej
         $hashHaslo = $wiersz['uzk_haslo'];
         if (password_verify($haslo, $hashHaslo)) {
+
             $_SESSION['zalogowany'] = true; //flaga
             $_SESSION['id_uzytkownika'] = $wiersz['uzk_id'];
             $_SESSION['uzytkownik'] = $wiersz['uzk_login']; //zapisywanie do globalnej tablicy session uzytkownika
