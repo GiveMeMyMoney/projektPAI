@@ -10,12 +10,12 @@ if(isset($_SESSION['zalogowany']) && $_SESSION['zalogowany']==true) {
 }
 
 if (isset($_SESSION['bladHasla']) &&  $_SESSION['bladHasla']==true) {
-    echo '<span style="color:red"> Nieprawidlowe haslo!</span>';
+    echo '<span style="color:red"> Nieprawidlowy login!</span>';
     unset($_SESSION['bladHasla']); $_SESSION['bladHasla'] = false;
 }
 
 if (isset($_SESSION['bladLoginu']) &&  $_SESSION['bladLoginu']==true) {
-    echo '<span style="color:red"> Nieprawidlowy login!</span>';
+    echo '<span style="color:red"> Nieprawidłowy login lub hasło!</span>';
     unset($_SESSION['bladLoginu']); $_SESSION['bladLoginu'] = false;
 }
 
