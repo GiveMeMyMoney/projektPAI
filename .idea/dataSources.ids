@@ -68,13 +68,15 @@
       <index name="mag_telefon1_UNIQUE" unique="true" columns="mag_telefon"/>
     </table>
     <table name="sesja" schema="" catalog="projekt_pai" type="TABLE">
-      <column name="ses_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="ses_uzk_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="ses_key" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
-      <column name="ses_id_host" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
-      <primary-key name="PRIMARY" columns="ses_id"/>
-      <foreign-key name="ses_uzk_id" columns="ses_uzk_id" ref-table="uzytkownik" ref-schema="" ref-catalog="projekt_pai" ref-columns="uzk_id" update-rule="0" delete-rule="0" deferrability="2"/>
-      <index name="ses_uzk_id_idx" unique="false" columns="ses_uzk_id"/>
+      <column name="ses_id" sqlType="VARCHAR" precision="64" scale="0" nullable="false" jdbcType="12"/>
+      <column name="ses_ip" sqlType="VARCHAR" precision="39" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ses_web" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ses_timestamp" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA=" version="true"/>
+      <primary-key name="PRIMARY" columns="_id"/>
+      <foreign-key name="fk_uzk_id" columns="ses_uzk_id" ref-table="uzytkownik" ref-schema="" ref-catalog="projekt_pai" ref-columns="uzk_id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="fk_uzk_id" unique="false" columns="ses_uzk_id"/>
     </table>
     <table name="specyfikacja" schema="" catalog="projekt_pai" type="TABLE">
       <column name="spec_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
@@ -94,6 +96,11 @@
       <column name="stan_przeterminowane" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <primary-key name="PRIMARY" columns="stan_id"/>
       <exported-key name="tow_stan_id" table="towar" schema="" catalog="projekt_pai" columns="tow_stan_id"/>
+    </table>
+    <table name="test" schema="" catalog="projekt_pai" type="TABLE">
+      <column name="idid" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="pole" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PRIMARY" columns="idid"/>
     </table>
     <table name="towar" schema="" catalog="projekt_pai" type="TABLE">
       <column name="tow_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
@@ -134,7 +141,7 @@
       <column name="uzk_email" sqlType="VARCHAR" precision="40" scale="0" nullable="false" jdbcType="12"/>
       <column name="uzk_data_zatrudnienia" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
       <primary-key name="PRIMARY" columns="uzk_id"/>
-      <exported-key name="ses_uzk_id" table="sesja" schema="" catalog="projekt_pai" columns="ses_uzk_id"/>
+      <exported-key name="fk_uzk_id" table="sesja" schema="" catalog="projekt_pai" columns="ses_uzk_id"/>
       <exported-key name="ua_uzk_id" table="uzytkownik_arkusz" schema="" catalog="projekt_pai" columns="ua_uzk_id"/>
       <exported-key name="um_uzk_id" table="uzytkownik_magazyn" schema="" catalog="projekt_pai" columns="um_uzk_id"/>
       <index name="uzk_haslo_UNIQUE" unique="true" columns="uzk_haslo"/>
@@ -173,9 +180,14 @@
         <parameter name="data2" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91" type="1" index="7"/>
       </prototype>
     </procedure>
-    <procedure name="login" schema="" catalog="projekt_pai" type="1">
+    <procedure name="log_in" schema="" catalog="projekt_pai" type="1">
       <prototype>
-        <parameter name="login2" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="login2" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+      </prototype>
+    </procedure>
+    <procedure name="usun_sesje" schema="" catalog="projekt_pai" type="1">
+      <prototype>
+        <parameter name="uzk_id2" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="1"/>
       </prototype>
     </procedure>
   </data-source>

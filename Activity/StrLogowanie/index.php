@@ -2,21 +2,43 @@
 
 session_start();
 
-include("../../BazaDanych/DBconnection.php");
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 
-if(isset($_SESSION['zalogowany']) && $_SESSION['zalogowany']==true) {
-    header('Location: ../StrGlowna/strGlowna.php');
-    exit();
+require_once("../../BazaDanych/DBconnection.php");
+
+/**
+ * Sprawdzanie errorow logowania.
+ */
+if (isset($_SESSION['bladSQL']) &&  $_SESSION['bladSQL']==true) {
+    echo '<span style="color:red"> Blad zwiazany z zapytaniem do BD </span>';
+    unset($_SESSION['bladLoginu']); $_SESSION['bladLoginu'] = false;
 }
 
 if (isset($_SESSION['bladHasla']) &&  $_SESSION['bladHasla']==true) {
-    echo '<span style="color:red"> Nieprawidlowy login!</span>';
+    echo '<span style="color:red"> Nieprawidłowe haslo!</span>';
     unset($_SESSION['bladHasla']); $_SESSION['bladHasla'] = false;
 }
 
 if (isset($_SESSION['bladLoginu']) &&  $_SESSION['bladLoginu']==true) {
-    echo '<span style="color:red"> Nieprawidłowy login lub hasło!</span>';
+    echo '<span style="color:red"> Nieprawidłowy login!</span>';
     unset($_SESSION['bladLoginu']); $_SESSION['bladLoginu'] = false;
+}
+
+/**
+ * Sprawdzanie czy przypadkiem(np jesli ktos zalogowany cofnie strone) ktos nie jest zalogowany,
+ * wtedy przekierowujemy.
+ */
+if(isset($_COOKIE['id_uzytkownik']) && $_COOKIE['id_uzytkownik'] != null) {
+    $dbconn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+    if($result = $dbconn->query(sprintf("SELECT * FROM sesja WHERE ses_id = '%s'; ", mysqli_real_escape_string($dbconn, $_COOKIE['id_sesja'])))) {
+        $row = $result->num_rows;
+        if ($row > 0) {
+            header('location: ../StrGlowna/strGlowna.php');
+            exit();
+        }
+    }
 }
 
 ?>

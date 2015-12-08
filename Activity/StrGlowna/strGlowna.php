@@ -1,10 +1,37 @@
 <?php
 
-session_start();
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 
-if(!isset($_SESSION['zalogowany']) || $_SESSION['zalogowany']==false) {
-    header('Location: ../StrLogowanie/index.php');
+require_once "../../BazaDanych/DBconnection.php";
+/**
+ * sprawdzam czy ustawione zmienne $_COOKIE['id_uzytkownik']
+ */
+debug_to_console($_COOKIE['id_sesja']);
+debug_to_console($_COOKIE['id_uzytkownik']);
+
+if(!isset($_COOKIE['id_uzytkownik']) || $_COOKIE['id_uzytkownik'] == null){
+    debug_to_console('jestem w');
+    header('location: ../StrLogowanie/index.php');
     exit();
+}
+
+debug_to_console($_COOKIE['id_sesja'] . "po");
+debug_to_console($_COOKIE['id_uzytkownik'] . "po");
+
+/**
+ * Sprawdzam czy istenieje record w tabeli SESJA o podanych cookisach.
+ */
+$dbconn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+$wiersz = mysqli_fetch_assoc(mysqli_query($dbconn, "SELECT ses_uzk_id FROM sesja WHERE
+      ses_id = '$_COOKIE[id_sesja]';"));
+
+debug_to_console("Taki uzk: " . $wiersz['ses_uzk_id']);
+if (!empty($wiersz['ses_uzk_id'])){
+    echo "Zalogowany użytkownik o ID: " . $wiersz['ses_uzk_id'] ;
+} else {
+    header('location: ../StrLogowanie/index.php');exit;
 }
 
 ?>
@@ -26,7 +53,7 @@ if(!isset($_SESSION['zalogowany']) || $_SESSION['zalogowany']==false) {
     <div id="container">
         <div id="header">
             <div class="tytul"><?php
-                    echo "Witaj ".$_SESSION['uzytkownik']."!";
+                    echo "Witaj ".$_COOKIE['id_uzytkownik']."!";
                 ?>
             </div>
             <div class="dane">
