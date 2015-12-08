@@ -2,6 +2,7 @@
 
 session_start();
 
+//wyczyszczenie cache strony. - dodawac do kazdego pliku
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
@@ -22,35 +23,10 @@ if($dbconn->connect_errno!=0) {
 
     $login = htmlentities($login, ENT_QUOTES, "UTF-8"); //encje HTMLa by nikt nie wykonal jakiegos sksryptu etc.
     $haslo = htmlentities($haslo, ENT_QUOTES, "UTF-8");
-    //$dbconn->exec(sprintf("INSERT INTO test VALUES (null, '%s')", mysqli_real_escape_string($dbconn, $login)));
 
-
-    ; //zabezpiecznie przed SQL injection(m.in -- '' i inne)
     debug_to_console("wchodze 1");
 
-   /* mysqli_query($dbconn, sprintf("INSERT INTO test VALUES (NULL, '%s')",
-        mysqli_real_escape_string($dbconn, 'cokolwiek2')
-    ));*/
-
-
-
-
-    //mysqli_query($dbconn, "INSERT INTO uzytkownik(uzk_login, uzk_haslo, uzk_imie, uzk_nazwisko, uzk_telefon, uzk_email, uzk_data_zatrudnienia)
-    //                         VALUES('hahaaha2', 'hahaaha2', 'hahaaha2', 'hahaaha2', 32323423, 'hahaaha@com', date('1999-12-12 12:12:12'));");
-    /*if (!mysqli_errno($dbconn)){
-        //setcookie("id", $id);
-        echo "zalogowano pomyślnie!";
-        header('Location: index.php');   //przekierowanie do innego pliku.
-    } else {debug_to_console("błąd podczas logowania!");
-        debug_to_console("Error: ".$dbconn->connect_errno);
-    }*/
     if($records = mysqli_query($dbconn, sprintf("SELECT * FROM uzytkownik WHERE uzk_login = '%s';", mysqli_real_escape_string($dbconn, $login)))) {
-        //usuwamy COOKIES
-        /*setcookie('id_sesja', null, time()-3600, '/');
-        unset($_COOKIE['id_sesja']);
-        setcookie('id_uzytkownik', null, time()-3600, '/');
-        unset($_COOKIE['id_uzytkownik']);*/
-
         debug_to_console("Wchodzi 2");
         $count1 = $records->num_rows;   //zliczanie ilosci prawidlowych zapytan
         if($count1 > 0) {
@@ -65,16 +41,13 @@ if($dbconn->connect_errno!=0) {
                 $_SESSION['bladHasla'] = false;
                 $_SESSION['bladLoginu'] = false;
 
-                //mysqli_query($dbconn, sprintf("INSERT INTO test VALUES (NULL, '%s');",
-                  //  mysqli_real_escape_string($dbconn, 'niach')));
-
                 debug_to_console("Wchodzi 4");
+
                 $id_sesja = md5(rand(-100,100) . microtime()) . md5(crc32(microtime()) . $_SERVER['REMOTE_ADDR']);
                 $ip = $_SERVER['REMOTE_ADDR'];
                 $web = $_SERVER['HTTP_USER_AGENT'];
                 $id_uzyt = $wiersz['uzk_id'];
                 //sprawdzam czy juz taki id_uzk nie ma w SESJA
-                //$checkRecords = @$dbconn->query(sprintf("SELECT * FROM sesja WHERE ses_uzk_id = '%s' ", mysqli_real_escape_string($dbconn,$id_uzyt)));
                 if ($checkRecords = mysqli_query($dbconn, sprintf("SELECT * FROM sesja WHERE ses_uzk_id = '%s';", mysqli_real_escape_string($dbconn,$id_uzyt)))) {
                     debug_to_console("Wchodzi 4 i 1pol");
                     //mysqli_query($dbconn, sprintf("INSERT INTO test VALUES (NULL, '%s');",

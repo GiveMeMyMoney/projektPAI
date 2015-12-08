@@ -6,18 +6,9 @@ session_start();
     header('Location: index.php');
     exit();
 }*/
-function debug_to_console( $data ) {
-    if ( is_array( $data ) )
-        $output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
-    else
-        $output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
-
-    echo $output;
-}
-
 
 require_once ('../../BazaDanych/DBconnection.php');
-
+$dbconn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 //w oparciu o cookies
 
 $login = $_POST['login2'];   //pobranie danych z HTMLa
@@ -42,7 +33,7 @@ $options = [
 ];
 $hashHaslo = password_hash($haslo, PASSWORD_BCRYPT, $options);
 
-if (mysqli_query($dbconn, sprintf("CALL addUser('%s', '%s', '%s', '%s', '%s', '%s', '%s')", mysqli_real_escape_string($dbconn, $login),
+if (mysqli_query($dbconn, sprintf("CALL add_user('%s', '%s', '%s', '%s', '%s', '%s', '%s')", mysqli_real_escape_string($dbconn, $login),
     mysqli_real_escape_string($dbconn, $hashHaslo), mysqli_real_escape_string($dbconn, $imie),
     mysqli_real_escape_string($dbconn, $nazwisko), mysqli_real_escape_string($dbconn, $telefon),
     mysqli_real_escape_string($dbconn, $email), mysqli_real_escape_string($dbconn, $data)))) {

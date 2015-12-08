@@ -6,7 +6,7 @@
 <?php
 require_once ('../../BazaDanych/DBconnection.php');
 
-    /*$connnectionDB = new mysqli($dbhost,$dbuser,$db_password,$db_name);*/
+    $dbconn = new mysqli($dbhost,$dbuser,$dbpass,$dbname);
     if($dbconn->connect_errno != 0){
         echo "error".$dbconn->connect_errno." Describe: ".$dbconn->connect_error;
     }

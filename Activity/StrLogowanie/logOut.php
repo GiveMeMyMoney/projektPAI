@@ -22,9 +22,7 @@ $_COOKIE['id_uzytkownik'] = null;
 debug_to_console($_COOKIE['id_sesja']);
 debug_to_console($_COOKIE['id_uzytkownik']);
 
-//wyczyszczenie cache strony.
-header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
+
 
 header('Location: index.php');
 
