@@ -1,0 +1,40 @@
+.inwentaryzacjaTile
+{
+    background-color: #ffec19;
+    margin: 15px 45px;
+    height: 155px;
+    padding-top: 5px;
+    text-align: left;
+    border-radius: 15px;
+    box-shadow: 10px 10px 5px #888888;
+    line-height: 140%;
+}
+
+.inwentaryzacjaTile:hover
+{
+    background-color: #d2c314;
+}
+
+.delete
+{
+    position: absolute;
+    bottom: -50px;
+    right: 10px;
+    padding: 5px;
+}
+
+.delete:hover
+{
+    font-size: 130%;
+}
+
+a.tilelink
+{
+    color: #333333;
+    text-decoration: none;
+}
+
+input {
+    float: right;
+
+}

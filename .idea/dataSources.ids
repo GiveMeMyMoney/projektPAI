@@ -11,9 +11,9 @@
       <column name="ark_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="ark_inw_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="ark_numer" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>
-      <column name="ark_czyZablokowany" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6"/>
-      <column name="ark_data_rozp" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
-      <column name="ark_data_zakon" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="ark_czyZablokowany" sqlType="TINYINT" precision="3" scale="0" nullable="false" jdbcType="-6" def="MA=="/>
+      <column name="ark_data_rozp" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="ark_data_zakon" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
       <column name="ark_opis" sqlType="VARCHAR" precision="70" scale="0" nullable="true" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="ark_id"/>
       <foreign-key name="ark_inw_id" columns="ark_inw_id" ref-table="inwentaryzacja" ref-schema="" ref-catalog="projekt_pai" ref-columns="inw_id" update-rule="0" delete-rule="0" deferrability="2"/>
@@ -25,8 +25,8 @@
       <column name="inw_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="inw_mag_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
       <column name="inw_numer" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>
-      <column name="inw_data_rozp" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
-      <column name="inw_data_zakon" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="inw_data_rozp" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="inw_data_zakon" sqlType="DATETIME" precision="19" scale="0" nullable="true" jdbcType="93"/>
       <column name="inw_opis" sqlType="VARCHAR" precision="45" scale="0" nullable="true" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="inw_id"/>
       <foreign-key name="inw_mag_id" columns="inw_mag_id" ref-table="magazyn" ref-schema="" ref-catalog="projekt_pai" ref-columns="mag_id" update-rule="0" delete-rule="3" deferrability="2"/>
@@ -47,7 +47,7 @@
     <table name="kategoria_towaru" schema="" catalog="projekt_pai" type="TABLE">
       <column name="kt_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
       <column name="kt_nazwa" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>
-      <column name="kt_opis" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>
+      <column name="kt_opis" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="kt_id"/>
       <exported-key name="ks_tow_id" table="kategoria_specyfikacja" schema="" catalog="projekt_pai" columns="ks_tow_id"/>
       <exported-key name="tow_kat_id" table="towar" schema="" catalog="projekt_pai" columns="tow_kat_id"/>
@@ -62,10 +62,22 @@
       <column name="mag_nr" sqlType="VARCHAR" precision="45" scale="0" nullable="false" jdbcType="12"/>
       <primary-key name="PRIMARY" columns="mag_id"/>
       <exported-key name="inw_mag_id" table="inwentaryzacja" schema="" catalog="projekt_pai" columns="inw_mag_id"/>
+      <exported-key name="mt_mag_id" table="magazyn_towar" schema="" catalog="projekt_pai" columns="mt_mag_id"/>
       <exported-key name="um_mag_id" table="uzytkownik_magazyn" schema="" catalog="projekt_pai" columns="um_mag_id"/>
       <index name="mag_nazwa_UNIQUE" unique="true" columns="mag_nazwa"/>
       <index name="mag_skrot_UNIQUE" unique="true" columns="mag_skrot"/>
       <index name="mag_telefon1_UNIQUE" unique="true" columns="mag_telefon"/>
+    </table>
+    <table name="magazyn_towar" schema="" catalog="projekt_pai" type="TABLE">
+      <column name="mt_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="mt_mag_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="mt_tow_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="mt_id"/>
+      <foreign-key name="mt_mag_id" columns="mt_mag_id" ref-table="magazyn" ref-schema="" ref-catalog="projekt_pai" ref-columns="mag_id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="mt_tow_id" columns="mt_tow_id" ref-table="towar" ref-schema="" ref-catalog="projekt_pai" ref-columns="tow_id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="mt_id_UNIQUE" unique="true" columns="mt_id"/>
+      <index name="mt_mag_id_idx" unique="false" columns="mt_mag_id"/>
+      <index name="mt_tow_id_idx" unique="false" columns="mt_tow_id"/>
     </table>
     <table name="sesja" schema="" catalog="projekt_pai" type="TABLE">
       <column name="_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
@@ -104,16 +116,17 @@
     </table>
     <table name="towar" schema="" catalog="projekt_pai" type="TABLE">
       <column name="tow_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
-      <column name="tow_ark_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="tow_ark_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="tow_kat_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="tow_stan_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="tow_stan_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="true" jdbcType="4"/>
       <column name="tow_nazwa" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>
       <column name="tow_kod_kreskowy" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
-      <column name="tow_data_odbioru" sqlType="DATE" precision="10" scale="0" nullable="false" jdbcType="91"/>
+      <column name="tow_data_odbioru" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93" def="Q1VSUkVOVF9USU1FU1RBTVA="/>
       <primary-key name="PRIMARY" columns="tow_id"/>
       <foreign-key name="tow_ark_id" columns="tow_ark_id" ref-table="arkusz_spisowy" ref-schema="" ref-catalog="projekt_pai" ref-columns="ark_id" update-rule="0" delete-rule="0" deferrability="2"/>
       <foreign-key name="tow_kat_id" columns="tow_kat_id" ref-table="kategoria_towaru" ref-schema="" ref-catalog="projekt_pai" ref-columns="kt_id" update-rule="0" delete-rule="0" deferrability="2"/>
       <foreign-key name="tow_stan_id" columns="tow_stan_id" ref-table="stan_rzeczywisty" ref-schema="" ref-catalog="projekt_pai" ref-columns="stan_id" update-rule="0" delete-rule="0" deferrability="2"/>
+      <exported-key name="mt_tow_id" table="magazyn_towar" schema="" catalog="projekt_pai" columns="mt_tow_id"/>
       <exported-key name="ts_tow_id" table="towar_specyfikacja" schema="" catalog="projekt_pai" columns="ts_tow_id"/>
       <index name="tow_ark_id_idx" unique="false" columns="tow_ark_id"/>
       <index name="tow_kat_id_idx" unique="false" columns="tow_kat_id"/>
@@ -169,7 +182,16 @@
       <index name="um_mag_id_idx" unique="false" columns="um_mag_id"/>
       <index name="um_uzk_id_idx" unique="false" columns="um_uzk_id"/>
     </table>
-    <procedure name="addUser" schema="" catalog="projekt_pai" type="1">
+    <table name="view_magazyn_towar" schema="" catalog="projekt_pai" type="VIEW">
+      <column name="mag_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4" def="MA=="/>
+      <column name="tow_ark_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="tow_kat_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="tow_stan_id" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="tow_nazwa" sqlType="VARCHAR" precision="25" scale="0" nullable="false" jdbcType="12"/>
+      <column name="tow_kod_kreskowy" sqlType="INT UNSIGNED" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="tow_data_odbioru" sqlType="DATETIME" precision="19" scale="0" nullable="false" jdbcType="93" def="JzAwMDAtMDAtMDAgMDA6MDA6MDAn"/>
+    </table>
+    <procedure name="add_user" schema="" catalog="projekt_pai" type="1">
       <prototype>
         <parameter name="login2" sqlType="VARCHAR" precision="80" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
         <parameter name="haslo2" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
@@ -180,9 +202,9 @@
         <parameter name="data2" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91" type="1" index="7"/>
       </prototype>
     </procedure>
-    <procedure name="log_in" schema="" catalog="projekt_pai" type="1">
+    <procedure name="get_user" schema="" catalog="projekt_pai" type="1">
       <prototype>
-        <parameter name="login2" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="uzk_login2" sqlType="VARCHAR" precision="100" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
       </prototype>
     </procedure>
     <procedure name="usun_sesje" schema="" catalog="projekt_pai" type="1">

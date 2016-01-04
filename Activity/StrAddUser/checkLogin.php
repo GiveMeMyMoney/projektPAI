@@ -6,7 +6,7 @@
 <?php
 require_once ('../../BazaDanych/DBconnection.php');
 
-    $dbconn = new mysqli($dbhost,$dbuser,$dbpass,$dbname);
+    $dbconn = getConnection();
     if($dbconn->connect_errno != 0){
         echo "error".$dbconn->connect_errno." Describe: ".$dbconn->connect_error;
     }
@@ -17,10 +17,10 @@ require_once ('../../BazaDanych/DBconnection.php');
         {
             $counts = $records->num_rows;
             if($counts == 1){
-                echo "*Login zajety!";
+                echo "*Login zajęty!";
                 $records->close();
             }else{
-                error_log(print_r("Login poprawny: " . $login, TRUE));
+                debug_to_console("Login poprawny: " . $login);
             }
         }
         $dbconn->close();

@@ -28,10 +28,10 @@ if (isset($_SESSION['bladLoginu']) &&  $_SESSION['bladLoginu']==true) {
 
 /**
  * Sprawdzanie czy przypadkiem(np jesli ktos zalogowany cofnie strone) ktos nie jest zalogowany,
- * wtedy przekierowujemy.
+ * wtedy przekierowuje.
  */
 if(isset($_COOKIE['id_uzytkownik']) && $_COOKIE['id_uzytkownik'] != null) {
-    $dbconn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+    $dbconn = getConnection();
     if($result = $dbconn->query(sprintf("SELECT * FROM sesja WHERE ses_id = '%s'; ", mysqli_real_escape_string($dbconn, $_COOKIE['id_sesja'])))) {
         $row = $result->num_rows;
         if ($row > 0) {
@@ -39,6 +39,7 @@ if(isset($_COOKIE['id_uzytkownik']) && $_COOKIE['id_uzytkownik'] != null) {
             exit();
         }
     }
+    $dbconn->close();
 }
 
 ?>
@@ -50,8 +51,16 @@ if(isset($_COOKIE['id_uzytkownik']) && $_COOKIE['id_uzytkownik'] != null) {
     <title>Moja strona WWW</title>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
 
+    <noscript>
+        Brak włączonej obsługi JavaScript. By nasz serwis działał prawidłowo musisz włączyć obsługe JavaScript!
+    </noscript>
+    <script type="text/javascript" src="../../cookieScript/cookies.js"></script>
+    <script>
+        checkCookie();
+    </script>
+
     <link rel="stylesheet" href="../../Style/styleStrLogowanie.css" type="text/css" >
-    <link rel="stylesheet" href="../Fontello/css/fontello.css" type="text/css" >
+    <link rel="stylesheet" href="../../Fontello/css/fontello.css" type="text/css" >
     <link href='https://fonts.googleapis.com/css?family=Lato|Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
 </head>
@@ -92,7 +101,7 @@ if(isset($_COOKIE['id_uzytkownik']) && $_COOKIE['id_uzytkownik'] != null) {
                 </form>
             </div>
             <a href="../StrAddUser/addUser.php" class="tilelink"> <div class="tile4" >
-                <i class="icon-user-1"></i> <br/>Dodaj użytkownika
+                <i class="icon-user-plus"></i> <br/>Dodaj użytkownika
             </div> </a>
             <div style="clear: both" ></div>
 

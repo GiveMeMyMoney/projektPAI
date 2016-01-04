@@ -21,16 +21,14 @@ debug_to_console($_COOKIE['id_sesja'] . "po");
 debug_to_console($_COOKIE['id_uzytkownik'] . "po");
 
 /**
- * Sprawdzam czy istenieje record w tabeli SESJA o podanych cookisach.
+ * Sprawdzam czy istnieje record w tabeli SESJA o podanych cookisach.
  */
-$dbconn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
-$wiersz = mysqli_fetch_assoc(mysqli_query($dbconn, "SELECT ses_uzk_id FROM sesja WHERE
+$dbconn = getConnection();
+$wierszSesja = mysqli_fetch_assoc(mysqli_query($dbconn, "SELECT ses_uzk_id FROM sesja WHERE
       ses_id = '$_COOKIE[id_sesja]';"));
 
-debug_to_console("Taki uzk: " . $wiersz['ses_uzk_id']);
-if (!empty($wiersz['ses_uzk_id'])){
-    echo "Zalogowany użytkownik o ID: " . $wiersz['ses_uzk_id'] ;
-} else {
+debug_to_console("Taki uzk: " . $wierszSesja['ses_uzk_id']);
+if (empty($wierszSesja['ses_uzk_id'])){
     header('location: ../StrLogowanie/index.php');exit;
 }
 
@@ -41,49 +39,26 @@ if (!empty($wiersz['ses_uzk_id'])){
 <head>
     <meta charset="utf-8">
     <title>Strona Glowna</title>
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+
+    <link rel="stylesheet" href="../../bootstrap/css/bootstrap.css" type="text/css" >
 
     <link rel="stylesheet" href="../../Style/styleStrGlowna.css" type="text/css" >
-    <link rel="stylesheet" href="../Fontello/css/fontello.css" type="text/css" >
+    <link rel="stylesheet" href="../../Fontello/css/fontello.css" type="text/css" >
+    <link rel="stylesheet" href="../../Fontello2/css/fontello.css" type="text/css" >
     <link href='https://fonts.googleapis.com/css?family=Lato|Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
 </head>
 
 <body>
     <div id="container">
-        <div id="header">
-            <div class="tytul"><?php
-                    echo "Witaj ".$_COOKIE['id_uzytkownik']."!";
-                ?>
-            </div>
-            <div class="dane">
-                Dane
-            </div>
-            <div class="wyloguj">
-                <a href = "../StrLogowanie/logOut.php"> Wyloguj! </a>
-            </div>
-            <div style="clear: both" > </div>
-        </div>
+        <?php
+            include('../header.php');
+        ?>
 
+        <?php
+        include('../leftPanel.php');
+        ?>
 
-        <div style="float:left; width: 30%; background-color: #98951f;" >
-            <a href="../StrAddUser/addUser.php" class="tilelink"> <div class="tile" >
-                    <i class="icon-user-1"></i> <br/>Magazyny
-                </div> </a>
-            <a href="../StrAddUser/addUser.php" class="tilelink"> <div class="tile" >
-                    <i class="icon-user-1"></i> <br/>Dodaj użytkownika
-                </div> </a>
-            <div style="clear: both" ></div>
-            <a href="../StrAddUser/addUser.php" class="tilelink"> <div class="tile" >
-                    <i class="icon-user-1"></i> <br/>Dodaj użytkownika
-                </div> </a>
-            <a href="../StrAddUser/addUser.php" class="tilelink"> <div class="tile" >
-                    <i class="icon-user-1"></i> <br/>Dodaj użytkownika
-                </div> </a>
-            <div style="clear: both" ></div>
-
-
-        </div>
 
         <div style="float:right; width: 70%; background-color: #fffc26;" >
             <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
@@ -94,10 +69,9 @@ if (!empty($wiersz['ses_uzk_id'])){
         <div style="clear: both" ></div>
 
 
-
-        <div id="footer" >
-            2015 &copy; Inwentaryzacja towarów na Magazynie - zapraszam! <i class="icon-mail-alt"></i> marcin.styczen1@gmail.com
-        </div>
+        <?php
+            include('../footer.php');
+        ?>
 
     </div>
 

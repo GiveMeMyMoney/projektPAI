@@ -1,0 +1,24 @@
+<?php
+
+require_once ('../../BazaDanych/DBconnection.php');
+$dbconn = getConnection();
+//w oparciu o cookies
+
+$numer = $_POST['numer'];   //pobranie danych z HTMLa
+$opis = $_POST['opis'];
+$idMagazyn = $_COOKIE['id_magazyn'];
+$dataRozpoczecia = date('Y-m-d H:i:s');
+
+debug_to_console("Jestem w insert");
+$dbconn = getConnection();
+mysqli_query($dbconn, "INSERT INTO inwentaryzacja (inw_mag_id, inw_numer, inw_data_rozp, inw_opis) VALUES ('$idMagazyn', '$numer', '$dataRozpoczecia', '$opis');");
+if (mysqli_errno($dbconn)){
+    debug_to_console("Problem z dodaniem inwentaryzacji do BD");
+    //$_SESSION['errorDodaniaMagazynuDoBD'] = true;
+}
+
+$dbconn->close();
+
+header('Location: inwentaryzacja.php');
+
+?>

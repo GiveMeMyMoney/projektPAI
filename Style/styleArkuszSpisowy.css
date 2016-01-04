@@ -1,0 +1,52 @@
+.arkuszSpisowyTileWithHover
+{
+    background-color: #33ff12;
+    margin: 15px 35px;
+    height: 125px;
+    padding-top: 10px;
+    text-align: left;
+    border-radius: 15px;
+    box-shadow: 10px 10px 5px #888888;
+    line-height: 150%;
+}
+
+.arkuszSpisowyTileWithHover:hover
+{
+    background-color: #2bcb10;
+}
+
+.arkuszSpisowyTile
+{
+    background-color: #33ff12;
+    margin: 15px 35px;
+    height: 125px;
+    padding-top: 10px;
+    text-align: left;
+    border-radius: 15px;
+    box-shadow: 10px 10px 5px #888888;
+    line-height: 150%;
+}
+
+.delete
+{
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    padding: 5px;
+}
+
+.delete:hover
+{
+    font-size: 130%;
+}
+
+a.tilelink
+{
+    color: #333333;
+    text-decoration: none;
+}
+
+input {
+    float: right;
+
+}

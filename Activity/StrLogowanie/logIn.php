@@ -14,7 +14,7 @@ if((!isset($_POST['login'])) || (!isset($_POST['haslo']))) {
 }
 
 require_once "../../BazaDanych/DBconnection.php";
-$dbconn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+$dbconn = getConnection();
 if($dbconn->connect_errno!=0) {
     echo "Error: ".$dbconn->connect_errno;
 } else {
@@ -26,7 +26,9 @@ if($dbconn->connect_errno!=0) {
 
     debug_to_console("wchodze 1");
 
-    if($records = mysqli_query($dbconn, sprintf("SELECT * FROM uzytkownik WHERE uzk_login = '%s';", mysqli_real_escape_string($dbconn, $login)))) {
+    $records = mysqli_query($dbconn, sprintf("SELECT * FROM uzytkownik WHERE uzk_login = '%s';", mysqli_real_escape_string($dbconn, $login)));
+
+    if($records) {
         debug_to_console("Wchodzi 2");
         $count1 = $records->num_rows;   //zliczanie ilosci prawidlowych zapytan
         if($count1 > 0) {
@@ -96,7 +98,7 @@ if($dbconn->connect_errno!=0) {
                         }
                     }
                 }
-                $records->close();
+                //$records->close();
                 header("location: ../StrGlowna/strGlowna.php");
 
             } else {
@@ -107,8 +109,8 @@ if($dbconn->connect_errno!=0) {
                     unset($_COOKIE['id_sesja']);
                 }
                 $_SESSION['bladHasla'] = true;
-                $records->close();
-                //header('Location: index.php');
+                //$records->close();
+                header('Location: index.php');
             }
         } else {
             if (isset($_COOKIE['id_uzytkownik']) || isset($_COOKIE['id_sesja'])) {
@@ -118,8 +120,8 @@ if($dbconn->connect_errno!=0) {
                 unset($_COOKIE['id_sesja']);
             }
             $_SESSION['bladLoginu'] = true;
-            $records->close();
-            //header('Location: index.php');
+            //$records->close();
+            header('Location: index.php');
         }
     }
     $dbconn->close();

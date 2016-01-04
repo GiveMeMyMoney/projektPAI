@@ -1,0 +1,6 @@
+1. Dodac ikonke kosza i zaprogramowac - magazyn, inwentaryzacja, arkusz, towar
+2. po kliknieciu w arkusz wyswietlaja sie towary przypisane do tego arkusza
+3. Zrobic tabele asocjacyjna magazyn-towar i wyswietlic wszystkie towary w zakladce "Towary": dla wybranego magazynu.
+4. Blad przy 1 wybieraniu magazynu wyswietla nazwe 1
+5. Zamienic napisy "dodawania" na ikonki.
+6. Dorobic zakladke uzytkownik - wyswieltenie info o uzytkowniku.

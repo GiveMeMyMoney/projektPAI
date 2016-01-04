@@ -8,7 +8,7 @@ session_start();
 }*/
 
 require_once ('../../BazaDanych/DBconnection.php');
-$dbconn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+$dbconn = getConnection();
 //w oparciu o cookies
 
 $login = $_POST['login2'];   //pobranie danych z HTMLa

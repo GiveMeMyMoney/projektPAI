@@ -1,0 +1,55 @@
+.kategoriaTile
+{
+    background-color: #0bff0c;
+    margin: 15px 45px;
+    height: 155px;
+    width: auto;
+    padding-top: 5px;
+    padding-left: 2%;
+    text-align: center;
+    box-shadow: 10px 10px 5px #888888;
+    border-radius: 15px;
+    line-height: 140%;
+}
+
+.kategoriaTile:hover
+{
+    background-color: #0bd80c;
+}
+
+.tableTile
+{
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+}
+
+.delete
+{
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    padding: 5px;
+}
+
+.delete:hover
+{
+    font-size: 130%;
+}
+
+.dodajBtn
+{
+    margin: 20px;
+    background-color: #2d1444;
+    box-shadow: 5px 5px 2px #bcbcbc;
+    color: white;
+    border-radius: 180px;
+    font-size: 15px;
+    padding: 10px;
+    float: right;
+}
+
+input {
+    float: right;
+
+}

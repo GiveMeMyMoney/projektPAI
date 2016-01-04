@@ -76,6 +76,15 @@ body
     margin-top: 0;
 }
 
+#infoHaslo
+{
+    color:red;
+    font-size: 12px;
+    margin-left: 120px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
 #submitBtn
 {
     background-color: #2d1444;

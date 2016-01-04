@@ -3,10 +3,17 @@
  * Plik sluzacy do laczenia z Baza Danych mySQL.
  */
 
-$dbhost = 'localhost:3306';
-$dbuser = 'root';
-$dbpass = 'Mieszko623169';
-$dbname = 'projekt_pai';
+function getConnection()
+{
+    $dbhost = 'localhost:3306';
+    $dbuser = 'root';
+    $dbpass = 'Mieszko623169';
+    $dbname = 'projekt_pai';
+    $dbconn = new mysqli($dbhost, $dbuser, $dbpass, $dbname) or die('cannot connect to DB');
+    $dbconn->set_charset("utf8");
+
+    return $dbconn;
+}
 
 //metoda do debugu w konsoli
 function debug_to_console( $data ) {
@@ -14,12 +21,45 @@ function debug_to_console( $data ) {
         $output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
     else
         $output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
-
     echo $output;
 }
-
 ?>
 
+
+<!--class Database
+{
+    private static $instance;
+    private static $dbhost = 'localhost:3306';
+    private static $dbuser = 'root';
+    private static $dbpass = 'Mieszko623169';
+    private static $dbname = 'projekt_pai';
+
+    private $dbconn;
+
+    private function __construct()
+    {
+        $this->dbconn = new mysqli(self::$dbhost, self::$dbuser, self::$dbpass, self::$dbname);
+        if (mysqli_connect_errno()) {
+            debug_to_console("Connect failed: %s\n" . mysqli_connect_error());
+            exit();
+        }
+    }
+
+    function __destruct() {
+        $this->dbconn->close();
+    }
+
+    public static function getConnection() {
+        if (self::$instance == null) {
+            self::$instance = new Database();
+        }
+        return self::$instance->dbconn;
+    }
+
+
+//metoda do debugu w konsoli
+
+}-->
 
 <!--//using mysqli
 /*$dbconn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
