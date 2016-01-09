@@ -20,13 +20,8 @@ setcookie("id_uzytkownik", null, time()-3600, '/');
 unset($_COOKIE['id_uzytkownik']);
 $_COOKIE['id_uzytkownik'] = null;
 
-setcookie("id_magazyn", null, time()-3600, '/');
-unset($_COOKIE['id_magazyn']);
-$_COOKIE['id_magazyn'] = null;
-
 //debug_to_console($_COOKIE['id_sesja']);
 //debug_to_console($_COOKIE['id_uzytkownik']);
-
 
 $dbconn->close();
 header('Location: index.php');

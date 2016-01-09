@@ -57,15 +57,18 @@ if(isset($_COOKIE['id_arkusza']) && $_COOKIE['id_arkusza'] != null){
 }
 
 //TODO gdy zaden CB nie ustawiony nie ma POST - trzeba jakos automatycznie wymusic...
+//TODO nie pozwalac juz zalaczonym towarom na bycie dolaczonym do innego arkusza?  TAK czy NIE?
 ///ta czesc kodu psuje polskie znaki WHY?!?
 
 function sprawdzTowary()
 {
+    $ilosc = 0;
     if (isset($_POST['wybraneTowary'])) {
         $dbconn = getConnection();
         mysqli_autocommit($dbconn, false);
 
         $arrWybraneTowary = $_POST['wybraneTowary'];
+        $ilosc = count($arrWybraneTowary);
         $idArk =  $_COOKIE['id_arkusza'];
         var_dump($idArk);
         try
@@ -74,9 +77,10 @@ function sprawdzTowary()
              * zle zrobiona transakcja do poprawy!
              */
             $resultStare = mysqli_fetch_array(mysqli_query($dbconn, "SELECT tow_id FROM towar WHERE tow_ark_id = '$idArk';"));
-            while ($resultStare) {
+            /*while ($resultStare) {
                 var_dump($resultStare['tow_id']);
-            }
+            }*/
+            var_dump($resultStare);
             if (false) {
                 throw new Exception("Error details: " . mysqli_error($dbconn) . ".");
             } else {
@@ -93,8 +97,8 @@ function sprawdzTowary()
                         var_dump("1 opcja");
                         for ($idTow = 1; $idTow <= $maxTowID; $idTow++) {
                             if (in_array($idTow, $arrWybraneTowary)) {
-                                echo $idTow . ' was checked!';
-                                debug_to_console($idTow . ' was checked!');
+                                var_dump($idTow . ' w 1 opcji zaznaczony');
+                                debug_to_console($idTow . ' w 1 opcji zaznaczony');
 
                                 $resultUpdate = mysqli_query($dbconn, "UPDATE towar SET tow_ark_id = '$idArk' WHERE tow_id = '$idTow';");
                                 if (!$resultUpdate) {
@@ -111,16 +115,17 @@ function sprawdzTowary()
                         var_dump("2 opcja");
                         for ($idTow = 1; $idTow <= $maxTowID; $idTow++) {
                             //te ktore byly zaznaczone
-                            if (in_array($idTow, $resultStare['tow_id'])) {
+                            if (in_array($idTow, $resultStare)) {
                                 //jesli teraz nie sa = UPDATE
                                 if (!in_array($idTow, $arrWybraneTowary)) {
+                                    var_dump($idTow . ' w 2 opcji odznaczony');
                                     $resultUpdate = mysqli_query($dbconn, "UPDATE towar SET tow_ark_id = NULL WHERE tow_id = '$idTow';");
                                     if (!$resultUpdate) {
                                         throw new Exception("Error details: " . mysqli_error($dbconn) . ".");
                                     }
                                 }
                             } else if (in_array($idTow, $arrWybraneTowary)) {
-                                echo $idTow . ' was checked!';
+                                var_dump($idTow . ' w 2 zaznaczony!');
                                 debug_to_console($idTow . ' was checked!');
 
                                 $resultUpdate = mysqli_query($dbconn, "UPDATE towar SET tow_ark_id = '$idArk' WHERE tow_id = '$idTow';");
@@ -154,22 +159,32 @@ function sprawdzTowary()
         }*/
 
     }
+    return $ilosc;
 }
 
 //if(isset($_POST['food']) && in_array(...
 
 
 
-function displayTowar($idTow, $nazwa, $kodKreskowy, $dataOdbioru)
+function displayTowar($nr, $idTow, $idStan, $name, $bareCode, $date)
 {
-    echo '<div class="inwentaryzacjaTile" >';
+    echo '<tr>';
+        echo '<th bgcolor="silver">' . $nr . '</th>';
+        echo '<td>' . $name . '</td>';
+        echo '<td>' . $bareCode . '</td>';
+        echo '<td>' . $date . '</td>';
 
-        echo 'Nazwa: ' . $nazwa . "<br/>";
-        echo 'Kod kreskowy: ' . $kodKreskowy . "<br/>";
-        echo 'Data odbioru: ' . $dataOdbioru . "<br/>";
+        $dbconn = getConnection();
+        $result = mysqli_fetch_array(mysqli_query($dbconn, "SELECT * FROM stan_rzeczywisty WHERE stan_id = '$idStan';"));
 
 
-    echo '</div>';
+        echo '<td>' . '<input type="number" name="nrPelnowartosciowe[]" value="' . $result['stan_pelnowartosciowe'] . '" step="0.01" min="0" style="width: 60px;"/>' . '</td>';
+        echo '<td>' . '<input type="number" name="nrUszkodzone[]" value="' . $result['stan_uszkodzone'] . '" step="0.01" min="0" style="width: 60px;"/>' . '</td>';
+        echo '<td>' . '<input type="number" name="nrZniszczone[]" value="' . $result['stan_zniszczone'] . '" step="0.01" min="0" style="width: 60px;"/>' . '</td>';
+        echo '<td>' . '<input type="number" name="nrPrzeterminowane[]" value="' . $result['stan_przeterminowane'] . '" step="0.01" min="0" style="width: 60px;"/>' . '</td>';
+        echo '<td>' . '<input type="hidden" name="inwentStan[]" value="' . $idStan . '" />' . '</td>';
+
+    echo '</tr>';
 
 }
 
@@ -198,6 +213,15 @@ function displayKategoria($idKat, $nazwa, $opis)
     <script type="text/javascript" src="../../cookieScript/cookies.js"></script>
     <script src="../../zPomocnicze/prototype.js" > </script>
     <script>
+        function isDecimalKey(evt)
+        {
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+
         function sprawdzKategoria(idKat) {
             var cookie_name = 'id_kategoria';
             create_cookie(cookie_name, idKat, 30, "/");
@@ -236,7 +260,7 @@ function displayKategoria($idKat, $nazwa, $opis)
 
 
     <link rel="stylesheet" href="../../Style/styleStrGlowna.css" type="text/css" >
-    <link rel="stylesheet" href="../../Style/styleInwentaryzacja.css" type="text/css" >
+    <link rel="stylesheet" href="../../Style/styleTowar.css" type="text/css" >
     <link rel="stylesheet" href="../../Style/styleKategoria.css" type="text/css" >
 
     <!-- Latest compiled and minified CSS -->
@@ -244,8 +268,6 @@ function displayKategoria($idKat, $nazwa, $opis)
 
     <link rel="stylesheet" href="../../Fontello/css/fontello.css" type="text/css" >
     <link href='https://fonts.googleapis.com/css?family=Lato|Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-
-
 
 </head>
 
@@ -263,40 +285,49 @@ function displayKategoria($idKat, $nazwa, $opis)
     <div style="float:right; width: 70%; background-color: #fffc26;" >
 
         <button onclick="zablokujArkusz()" style="margin: 15px;" type="button" class="btn btn-info btn-lg">Zablokuj</button>
-        <!--
-        klikam
-        upadteuje arkusz_spisowy set czyZablokowany = true;
-        pozniej przeladowuje na arkuszach
 
-        if (true)
-            blokuje klikacza na arkuszu
+        <div class="towarTile">
+            <table width="93%">
+                <tr>
+                    <th bgcolor="silver">&nbsp;</th>
+                    <th bgcolor="silver">Nazwa</th>
+                    <th bgcolor="silver">Kod kreskowy</th>
+                    <th bgcolor="silver">Data dodania</th>
+                    <th bgcolor="silver">Pełno<br>wartościowe</th>
+                    <th bgcolor="silver">Uszko<br>dzone</th>
+                    <th bgcolor="silver">Znisz<br>czone</th>
+                    <th bgcolor="silver">Przeter<br>minowane</th>
+                </tr>
 
-        -->
+                <?php
 
-        <?php
+                $ilosc = sprawdzTowary();
 
-        sprawdzTowary();
+                $dbconn = getConnection();
+                $idArk =  $_COOKIE['id_arkusza'];
+                $result = mysqli_query($dbconn, "SELECT * FROM towar WHERE tow_ark_id = '$idArk';");
+                $count = $result->num_rows;
 
-        $dbconn = getConnection();
-        $idArk =  $_COOKIE['id_arkusza'];
-        $result = mysqli_query($dbconn, "SELECT * FROM towar WHERE tow_ark_id = '$idArk';");
-        $count = $result->num_rows;
-
-        if ($count>0) {
-            while ($wierszTowar = mysqli_fetch_array($result)) {
-                displayTowar($wierszTowar['tow_id'], $wierszTowar['tow_nazwa'], $wierszTowar['tow_kod_kreskowy'], $wierszTowar['tow_data_odbioru']);
-            }
-        } else {
-            echo '<div style="margin: 20px; color: red">';
-            echo '*Brak aktualnych towarów dla tego arkusza spisowego';
-            echo '</div>';
-        }
+                if ($count>0) {
+                    echo '<form action="updateStanTowarow.php" method="post">';
+                    for ($iter=0; $wierszTowar = mysqli_fetch_array($result); $iter++) {
+                        displayTowar($iter, $wierszTowar['tow_id'], $wierszTowar['tow_stan_id'], $wierszTowar['tow_nazwa'], $wierszTowar['tow_kod_kreskowy'], $wierszTowar['tow_data_odbioru']);
+                    }
+                    echo '<input type="submit" style="margin: 10px; margin-right: 25px; color: #fff; background-color: #31b0d5; border-color: #269abc;" class="btn btn-default" value="Wprowadź zmiany"/>';
+                } else {
+                    echo '<div style="margin: 20px; color: red">';
+                    echo '*Brak aktualnych towarów dla tego arkusza spisowego';
+                    echo '</div>';
+                }
 
 
-        ?>
+                ?>
+
+            </table>
+        </div>
 
         <!-- Trigger the modal with a button -->
-        <button style="float: right; margin: 15px;" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Dodaj towar</button>
+        <button style="float: right; margin: 15px;" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Dodaj towary</button>
 
         <!-- Modal -->
         <div id="myModal" class="modal fade" role="dialog">

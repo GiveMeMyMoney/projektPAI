@@ -36,16 +36,19 @@ if(!isset($_COOKIE['id_magazyn']) && $_COOKIE['id_magazyn'] == null){
 
 function displayKategoria($idKat, $nazwa, $opis)
 {
+    echo '<div class="col-lg-4">';
     echo '<a href="towaryMagazyn.php" onclick="sprawdzKategoria(' . $idKat . ');" class="tilelink">';
         echo '<div class="kategoriaTile" >';
 
-            echo '<div style="float: left; width: 35%; text-align: center;">';
+            echo '<div style="text-align: center;">';
             echo '<i class="icon-home"></i> <br/>';
             echo $nazwa . "<br/>";
             echo '</div>';
 
         echo '</div>';
     echo '</a>';
+    echo '</div>';
+
 }
 
 ?>
@@ -109,9 +112,21 @@ function displayKategoria($idKat, $nazwa, $opis)
         $count = $result->num_rows;
 
         if ($count>0) {
-            while ($wierszKategoria = mysqli_fetch_array($result)) {
+            echo '<div class="row">';
+            for ($iter = 0; $wierszKategoria = mysqli_fetch_array($result);) {
                 displayKategoria($wierszKategoria['kt_id'], $wierszKategoria['kt_nazwa'], $wierszKategoria['kt_opis']);
+
+
+                //displayKategoria($wierszKategoria['kt_id'], $wierszKategoria['kt_nazwa'], $wierszKategoria['kt_opis']);
+                //displayKategoria($wierszKategoria['kt_id'], $wierszKategoria['kt_nazwa'], $wierszKategoria['kt_opis']);
+
+                $iter++;
+                if (($iter % 3) == 0) {
+                    echo '</div><div class="row">';
+                }
+
             }
+            echo '</div>';
         } else {
             echo '<div style="margin: 20px; color: red">';
             echo '*Brak aktualnych kategorii';

@@ -20,8 +20,8 @@
     <a href="../Towary/kategoria.php" class="tilelink"> <div class="tile" >
             <i class="icon-barcode"></i> <br/>Towary
         </div> </a>
-    <a href="../StrAddUser/addUser.php" class="tilelink"> <div class="tile" >
-            <i class="icon-user"></i> <br/>Użytkownik
+    <a href="../StrGlowna/strGlowna.php" class="tilelink"> <div class="tile" >
+            <i class="icon-user"></i> <br/>Home
         </div> </a>
     <div style="clear: both" ></div>
 

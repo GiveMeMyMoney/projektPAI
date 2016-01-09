@@ -24,6 +24,22 @@ body
     margin-top: 20px;
 }
 
+.rightPanel
+{
+    float:right;
+    width: 70%;
+    background-color: #fffc26;
+
+}
+
+#zegar
+{
+    font-size: 40px;
+    font-family: 'Josefin Sans', sans-serif;
+    text-align: right;
+    padding: 20px;
+}
+
 .tytul {
     display:inline-block;
     width: 33%;
@@ -73,4 +89,21 @@ a.tilelink
 {
     color: #333333;
     text-decoration: none;
+}
+
+p {
+    text-indent: 30px;
+    padding-left: 8px;
+}
+
+p::first-letter {
+    color: #404040;
+    font-size:130%;
+}
+
+h3 {
+    font-family: 'Josefin Sans', sans-serif;
+    padding-left: 60px;
+    padding-top: 10px;
+    font-size:150%;
 }

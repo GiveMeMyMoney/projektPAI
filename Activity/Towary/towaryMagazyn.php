@@ -33,7 +33,15 @@ if(!isset($_COOKIE['id_magazyn']) && $_COOKIE['id_magazyn'] == null){
     header('Location: ../Magazyn/magazyn.php');
 }
 
-function displayCommodity($nr, $idTow, $name, $bareCode, $date, $arkusz, $stan)
+/**
+ * Sprawdzam czy wybrano kategorie
+ */
+if(!isset($_COOKIE['id_kategoria']) && $_COOKIE['id_kategoria'] == null){
+    header('Location: kategoria.php');
+}
+
+
+function displayCommodity($nr, $idTow, $idTowarArkusz, $name, $bareCode, $date, $arkusz, $stan)
 {
     echo '<tr>';
         echo '<th bgcolor="silver">' . $nr . '</th>';
@@ -49,17 +57,39 @@ function displayCommodity($nr, $idTow, $name, $bareCode, $date, $arkusz, $stan)
             echo '<td> n/a </td>';
         }
 
-        if ($stan != null) {
-            $dbconn = getConnection();
-            $result = mysqli_fetch_assoc(mysqli_query($dbconn, "SELECT stan_ilosc_calosciowy FROM stan_rzeczywisty WHERE stan_id = '$stan';"));
+        //stan
+        $dbconn = getConnection();
+        $result = mysqli_fetch_assoc(mysqli_query($dbconn, "SELECT * FROM stan_rzeczywisty WHERE stan_id = '$stan';"));
+        if ($result['stan_pelnowartosciowe'] != null || $result['stan_uszkodzone'] != null || $result['stan_zniszczone'] != null || $result['stan_przeterminowane'] != null) {
             echo '<td>' . $result['stan_ilosc_calosciowy'] . '</td>';
         } else {
             echo '<td> n/a </td>';
         }
 
+        //TODO cos to zle wyswietla...
+        echo '<td> <div class="delete" onclick="deleteCommodity(' . $idTow . ');" >' ;
+        echo '<a href="javascript: void(0)" class="tilelink">';
+        echo '<i class="icon-plus"></i>';
+        echo '</a>';
+        echo '</div> </td>';
+
+
+
+        /*echo '<td> <div onclick="deleteCommodity(' . $idTow . ');" class="delete">' ;
+        echo '<a href="javascript: void(0)" class="tilelink">';
+        echo '<i class="icon-plus"></i>';
+        echo '</a>';
+        echo '</div> </td>';*/
+
         if (isset($_COOKIE['opcja_wyboru_towarow']) && $_COOKIE['opcja_wyboru_towarow'] == true) {
-            echo '<td>' . '<input type="checkbox" name="wybraneTowary[]" value="' . $idTow . '">' . '</td>';
+            $idArk =  $_COOKIE['id_arkusza'];
+            if ($idTowarArkusz == $idArk) {
+                echo '<td>' . '<input type="checkbox" name="wybraneTowary[]" value="' . $idTow . '" checked >' . '</td>';
+            } else {
+                echo '<td>' . '<input type="checkbox" name="wybraneTowary[]" value="' . $idTow . '">' . '</td>';
+            }
         }
+
 
     echo '</tr>';
 }
@@ -82,16 +112,17 @@ function checkWhichCheckBoxesAreSelected()
 <head>
     <meta charset="utf-8">
     <title>Strona Główna</title>
-    <?php
-/*    function wybieranieTowaru()
-    {
-        setcookie("opcja_wyboru_towarow", null, time()-3600, '/');
-        unset($_COOKIE['opcja_wyboru_towarow']);
-        $_COOKIE['opcja_wyboru_towarow'] = null;
-        echo '<button style="margin: 15px;" type="button" class="btn btn-info btn-lg">Wybieram!</button>';
-    }
 
-    */?>
+    <style>
+        table,th,td
+        {
+            /*border:1px solid black;*/
+            border-collapse:collapse;
+
+        }
+    </style>
+
+
 
     <script type="text/javascript" src="../../cookieScript/cookies.js"></script>
     <script src="../../zPomocnicze/prototype.js" > </script>
@@ -104,23 +135,23 @@ function checkWhichCheckBoxesAreSelected()
         /*function sprawdzMagazyn(idMag) {
             var cookie_name = 'id_magazyn';
             create_cookie(cookie_name, idMag, 30, "/");
-        }
+        }*/
 
-        function deleteCommodity(name) {
-            var answer = confirm ("Czy na pewno chcesz usunac ten magazyn?");
+        function deleteCommodity(idTow) {
+            var answer = confirm ("Czy na pewno chcesz usunac ten towar z tego magazynu?");
             if (answer) {
-                var data = name;
-                var myAjax = new Ajax.Request('deleteMagazynFromDB.php', {
+                var data = idTow;
+                var myAjax = new Ajax.Request('deleteTowarFromDB.php', {
                     method: 'post',
-                    parameters: "nazwaMagazyn=" + data,
+                    parameters: "idTowar=" + data,
                     onSuccess: function (showResponse) {
-                        alert("Usunięto magazyn o id: " + data);
+                        alert("Usunięto towar o id: " + data);
                         //window.location="http://www.yahoo.com/"
                         window.location.reload();
                     }
                 });
             }
-        }*/
+        }
 
     </script>
 
@@ -160,65 +191,67 @@ function checkWhichCheckBoxesAreSelected()
 
     <div style="float:right; width: 70%; background-color: #fffc26;" >
 
+        <a id="sekcja_gora"></a>
+
         <div class="towarTile">
 
-            <div class="tableTile">
-                <table width="93%">
-                    <tr>
-                        <th bgcolor="silver">&nbsp;</th>
-                        <th bgcolor="silver">Nazwa</th>
-                        <th bgcolor="silver">Kod kreskowy</th>
-                        <th bgcolor="silver">Data dodania</th>
-                        <th bgcolor="silver">Arkusz</th>
-                        <th bgcolor="silver">Stan</th>
-                        <?php
-                        if (isset($_COOKIE['opcja_wyboru_towarow']) && $_COOKIE['opcja_wyboru_towarow'] == true) {
-                            echo '<th bgcolor="silver">Wybierz</th>';
-                        }
-                        ?>
-                    </tr>
-
+            <table width="93%">
+                <tr>
+                    <th bgcolor="silver">&nbsp;</th>
+                    <th bgcolor="silver">Nazwa</th>
+                    <th bgcolor="silver">Kod kreskowy</th>
+                    <th bgcolor="silver">Data dodania</th>
+                    <th bgcolor="silver">Arkusz</th>
+                    <th bgcolor="silver">Stan</th>
+                    <th bgcolor="silver">Usuń</th>
                     <?php
-
-                    $dbconn = getConnection();
-                    $idMag = $_COOKIE['id_magazyn'];
-                    $idKat = $_COOKIE['id_kategoria'];
-                    $result = mysqli_query($dbconn, "SELECT * FROM view_magazyn_towar WHERE mag_id = '$idMag' AND tow_kat_id = '$idKat';");
-                    $count = $result->num_rows;
-
-                    if ($count>0) {
-                        if (isset($_COOKIE['opcja_wyboru_towarow']) && $_COOKIE['opcja_wyboru_towarow'] == true) {
-                            echo '<form action="towaryArkusz.php" method="post">';
-                        }
-
-                        for ($iter = 0; $wierszTowar = mysqli_fetch_array($result); $iter++) {
-                            displayCommodity($iter, $wierszTowar['tow_id'], $wierszTowar['tow_nazwa'], $wierszTowar['tow_kod_kreskowy'], $wierszTowar['tow_data_odbioru'],
-                                $wierszTowar['tow_ark_id'], $wierszTowar['tow_stan_id']);
-                        }
-
-                        if (isset($_COOKIE['opcja_wyboru_towarow']) && $_COOKIE['opcja_wyboru_towarow'] == true) {
-                            /*echo '<script type="text/javascript">' . 'delete_cookie(\'opcja_wyboru_towarow\');'
-                                . '</script>';*/
-
-                            echo '<input style="" type="submit" class="btn btn-default" value="Wybieram!"/>';
-                        echo '</form>';
-                        /*echo '<button style="margin: 15px;" type="button" class="btn btn-info btn-lg">Wybieram!</button>';*/
+                    if (isset($_COOKIE['opcja_wyboru_towarow']) && $_COOKIE['opcja_wyboru_towarow'] == true) {
+                        echo '<th bgcolor="silver">Wybierz</th>';
                     }
-                    } else {
-                        echo '<div style="margin: 20px; color: red">';
-                        echo '*Brak aktualnych towarów dla tej kategorii';
-                        echo '</div>';
-                    }
-
-                    //checkWhichCheckBoxesAreSelected();
-
                     ?>
+                </tr>
 
-                </table>
+                <?php
 
-            </div>
+                $dbconn = getConnection();
+                $idMag = $_COOKIE['id_magazyn'];
+                $idKat = $_COOKIE['id_kategoria'];
+                $result = mysqli_query($dbconn, "SELECT * FROM view_magazyn_towar WHERE mag_id = '$idMag' AND tow_kat_id = '$idKat';");
+                $count = $result->num_rows;
+
+                if ($count>0) {
+                    if (isset($_COOKIE['opcja_wyboru_towarow']) && $_COOKIE['opcja_wyboru_towarow'] == true) {
+                        echo '<form action="towaryArkusz.php" method="post">';
+                    }
+
+                    for ($iter = 0; $wierszTowar = mysqli_fetch_array($result); $iter++) {
+                        displayCommodity($iter, $wierszTowar['tow_id'], $wierszTowar['tow_ark_id'], $wierszTowar['tow_nazwa'], $wierszTowar['tow_kod_kreskowy'], $wierszTowar['tow_data_odbioru'],
+                            $wierszTowar['tow_ark_id'], $wierszTowar['tow_stan_id']);
+                    }
+
+                    if (isset($_COOKIE['opcja_wyboru_towarow']) && $_COOKIE['opcja_wyboru_towarow'] == true) {
+                        /*echo '<script type="text/javascript">' . 'delete_cookie(\'opcja_wyboru_towarow\');'
+                            . '</script>';*/
+
+                        echo '<input  type="submit" style="margin: 10px; margin-right: 25px; color: #fff; background-color: #31b0d5; border-color: #269abc;" class="btn btn-default" value="Wybieram!"/>';
+                    echo '</form>';
+                    /*echo '<button style="margin: 15px;" type="button" class="btn btn-info btn-lg">Wybieram!</button>';*/
+                }
+                } else {
+                    echo '<div style="margin: 20px; color: red">';
+                    echo '*Brak aktualnych towarów dla tej kategorii';
+                    echo '</div>';
+                }
+
+                //checkWhichCheckBoxesAreSelected();
+
+                ?>
+
+            </table>
 
         </div>
+
+        <a style="float: left; margin: 15px;" type="button" class="btn btn-info btn-lg" href="#sekcja_gora">W górę</a>
 
         <!-- Trigger the modal with a button -->
         <button style="float: right; margin: 15px;" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Dodaj towar</button>

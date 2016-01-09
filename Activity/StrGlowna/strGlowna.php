@@ -44,12 +44,13 @@ if (empty($wierszSesja['ses_uzk_id'])){
 
     <link rel="stylesheet" href="../../Style/styleStrGlowna.css" type="text/css" >
     <link rel="stylesheet" href="../../Fontello/css/fontello.css" type="text/css" >
-    <link rel="stylesheet" href="../../Fontello2/css/fontello.css" type="text/css" >
     <link href='https://fonts.googleapis.com/css?family=Lato|Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+    <script src="../../zPomocnicze/timer.js"></script>
 
 </head>
 
-<body>
+<body onload=czas();>
     <div id="container">
         <?php
             include('../header.php');
@@ -60,10 +61,39 @@ if (empty($wierszSesja['ses_uzk_id'])){
         ?>
 
 
-        <div style="float:right; width: 70%; background-color: #fffc26;" >
-            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in</p>
-            <p>voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+        <div class="rightPanel" >
+            <div id="zegar"> <p>Obsługa systemu: </p></div>
+
+            <h3>*Obsługa magazynów</h3>
+
+            <p>1. W zakładce "Magazyny" możesz sprawdzić swoje aktualne magazyny.</p>
+            <p>2. Możesz dodać jak i usunąć magazyn.</p>
+            <p>3. Po wybraniu magazynu zostaniesz przeniesiony do wyboru Inwentaryzacji jakie zostały rozpoczęty w danym magazynie.</p>
+            <p>4. Możesz również sprawdzić wszystkie swoje towary jakie posiada wybrany uprzednio magazyn.</p>
+
+            <h3>*Obsługa towarów</h3>
+
+            <p>1. W zakładce "Towary" możesz sprawdzić swoje aktualne towary przypisane do danego magazynu.</p>
+            <p>2. Możesz dodać jak i usunąć towar.</p>
+            <p>3. W tabelce sprawdzisz różne iformacje na temat towaru.
+                Jeśli towar nie jest przypięty do żadnego arkusza spisowego zostaje wyświetlone "N/A",
+                dotyczy to również stanu towaru w danym magazynie.</p>
+
+            <h3>*Obsługa inwentaryzacji</h3>
+
+            <p>1. W zakładce "Inwentaryzacja" możesz sprawdzić swoje aktualne arkusze inwentaryzacyjne przypisane do danego magazynu.</p>
+            <p>2. Możesz dodać jak i usunąć arkusz.</p>
+            <p>3. Po wybraniu inwentaryzacji zostaniesz przeniesiony do wyboru arkusz spisowego danej inwentaryzacji .</p>
+            <p>4. Na kafelku arkusz zostaniesz poinformowany czy dany arkusz jest już zablokowany i nie można go edytować (zakończony).</p>
+            <p>5. Możesz dodać jak i usunąć arkusz spisowy.</p>
+            <p>6. Po wybraniu arkusza zostaniesz przeniesiony do listy towarów wybranych dla tego arkusza.</p>
+            <p>7. Możesz dokonać sprawdzenia stanu danego towaru wpisując w odpowiednie pole i klikając "Wprowadź zmiany".</p>
+            <p>8. Jeśli cztery pola w danym towarze są puste to znaczy że nikt jeszcze nie sprawdzxał jego stanu</p>
+            <p>9. Możesz dodać i usunąć towar wybierając najpierw kategorię a później ustawiając odpowiednio check-boxy</p>
+            <p>10. Zablokowanie arkusza jest możliwe pod przyciskiem "Zablokuj"
+                (UWAGA! nie ma możliwości późniejszego powrotu do arkusza w celu bezpieczeństwa i brak ingerencji osób 3)</p>
+
+            <h3>Życzymy miłego użytkowania w razie problemów zapraszamy do kontaktu. JunSOFT Company</h3>
 
         </div>
         <div style="clear: both" ></div>

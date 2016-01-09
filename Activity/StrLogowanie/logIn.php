@@ -39,9 +39,6 @@ if($dbconn->connect_errno!=0) {
                 /**
                  * Zmienne sesyjne jako flagi by rozpoznac blad.
                  */
-                $_SESSION['bladSQL'] = false;
-                $_SESSION['bladHasla'] = false;
-                $_SESSION['bladLoginu'] = false;
 
                 debug_to_console("Wchodzi 4");
 
@@ -72,7 +69,7 @@ if($dbconn->connect_errno!=0) {
                             debug_to_console($_COOKIE['id_uzytkownik']);
                         } else {
                             debug_to_console("błąd podczas logowania1!");
-                            $_SESSION['bladSQL'] = true;
+                            setcookie('bladSQL', true, time()+3600, "/");
                             header('Location: index.php');
                         }
                     } else {
@@ -93,7 +90,7 @@ if($dbconn->connect_errno!=0) {
                             $_COOKIE['id_uzytkownik'] = $id_uzyt;
                         } else {
                             debug_to_console("błąd podczas logowania2!");
-                            $_SESSION['bladSQL'] = true;
+                            setcookie('bladSQL', true, time()+3600, "/");
                             header('Location: index.php');
                         }
                     }
@@ -108,7 +105,7 @@ if($dbconn->connect_errno!=0) {
                     setcookie('id_sesja', null, time() - 1, '/');
                     unset($_COOKIE['id_sesja']);
                 }
-                $_SESSION['bladHasla'] = true;
+                setcookie('bladHasla', true, time()+3600, "/");
                 //$records->close();
                 header('Location: index.php');
             }
@@ -119,7 +116,7 @@ if($dbconn->connect_errno!=0) {
                 setcookie('id_sesja', null, time() - 1, '/');
                 unset($_COOKIE['id_sesja']);
             }
-            $_SESSION['bladLoginu'] = true;
+            setcookie('bladLoginu', true, time()+3600, "/");
             //$records->close();
             header('Location: index.php');
         }

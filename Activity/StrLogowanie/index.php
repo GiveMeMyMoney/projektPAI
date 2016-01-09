@@ -7,23 +7,23 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
 require_once("../../BazaDanych/DBconnection.php");
+include("usunCookies.php");
 
-/**
- * Sprawdzanie errorow logowania.
- */
-if (isset($_SESSION['bladSQL']) &&  $_SESSION['bladSQL']==true) {
+usunCookies();
+
+if (isset($_COOKIE['bladSQL']) &&  $_COOKIE['bladSQL']==true) {
     echo '<span style="color:red"> Blad zwiazany z zapytaniem do BD </span>';
-    unset($_SESSION['bladLoginu']); $_SESSION['bladLoginu'] = false;
+    setcookie("bladSQL", null, time()-3600, '/');
 }
 
-if (isset($_SESSION['bladHasla']) &&  $_SESSION['bladHasla']==true) {
+if (isset($_COOKIE['bladHasla']) &&  $_COOKIE['bladHasla']==true) {
     echo '<span style="color:red"> Nieprawidłowe haslo!</span>';
-    unset($_SESSION['bladHasla']); $_SESSION['bladHasla'] = false;
+    setcookie("bladHasla", null, time()-3600, '/');
 }
 
-if (isset($_SESSION['bladLoginu']) &&  $_SESSION['bladLoginu']==true) {
+if (isset($_COOKIE['bladLoginu']) &&  $_COOKIE['bladLoginu']==true) {
     echo '<span style="color:red"> Nieprawidłowy login!</span>';
-    unset($_SESSION['bladLoginu']); $_SESSION['bladLoginu'] = false;
+    setcookie("bladLoginu", null, time()-3600, '/');
 }
 
 /**

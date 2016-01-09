@@ -30,9 +30,16 @@ if (empty($wierszSesja['ses_uzk_id'])){
 /**
  * Sprawdzam czy wybrano magazyn
  */
-/*if(!isset($_COOKIE['id_magazyn']) && $_COOKIE['id_magazyn'] == null){
+if(!isset($_COOKIE['id_magazyn']) && $_COOKIE['id_magazyn'] == null){
     header('Location: ../Magazyn/magazyn.php');
-}*/
+}
+
+/**
+ * Sprawdzam czy wybrano inwentaryzacje
+ */
+if(!isset($_COOKIE['id_inwentaryzacji']) && $_COOKIE['id_inwentaryzacji'] == null){
+    header('Location: ../Inwentaryzacja/inwentaryzacja.php');
+}
 
 
 function displayArkuszSpisowy($idArk, $numer, $czyZablokowany, $arkDataRozpoczęcia, $arkDataZakonczenia, $arkOpis)

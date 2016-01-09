@@ -2,7 +2,7 @@
 {
     background-color: #ffdcd0;
     margin: 15px 45px;
-    height: 155px;
+    overflow: auto;
     width: auto;
     padding-top: 5px;
     padding-left: 2%;
@@ -11,6 +11,7 @@
     border-radius: 15px;
     line-height: 170%;
     position: relative;
+    padding-bottom: 10px;
 }
 
 .magazynTile:hover
@@ -18,25 +19,9 @@
     background-color: #a6191a;
 }
 
-.tableTile
-{
-    width: 100%;
-    position: absolute;
-    z-index: 1;
-}
-
-
-.delete
-{
-    position: absolute;
-    bottom: 0;
-    right: 10px;
-    padding: 5px;
-}
-
 .delete:hover
 {
-    font-size: 130%;
+    font-size: 110%;
 }
 
 .dodajBtn
