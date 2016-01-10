@@ -1,12 +1,12 @@
 .inwentaryzacjaTile
 {
-    background-color: #ffec19;
+    background-color: #f7f726;
     margin: 15px 45px;
     height: 155px;
     padding-top: 5px;
     text-align: left;
     border-radius: 15px;
-    box-shadow: 10px 10px 5px #888888;
+    box-shadow: 5px 5px 2px #858585;
     line-height: 140%;
 }
 
@@ -25,12 +25,11 @@
 
 .delete:hover
 {
-    font-size: 130%;
+    font-size: 70px;
 }
 
 a.tilelink
 {
-    color: #333333;
     text-decoration: none;
 }
 

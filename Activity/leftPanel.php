@@ -8,7 +8,7 @@
 
 ?>
 
-<div style="float:left; width: 30%; background-color: #98951f;" >
+<div style="float:left; width: 30%; background-color: #403f4c;" >
     <!--musi byc wyjscie z katalogu-->
     <a href="../Magazyn/magazyn.php" class="tilelink"> <div class="tile" >
             <i class="icon-warehouse"></i> <br/>Magazyny
@@ -21,7 +21,7 @@
             <i class="icon-barcode"></i> <br/>Towary
         </div> </a>
     <a href="../StrGlowna/strGlowna.php" class="tilelink"> <div class="tile" >
-            <i class="icon-user"></i> <br/>Home
+            <i class="icon-home-1"></i> <br/>Home
         </div> </a>
     <div style="clear: both" ></div>
 

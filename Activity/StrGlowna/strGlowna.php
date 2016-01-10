@@ -91,9 +91,9 @@ if (empty($wierszSesja['ses_uzk_id'])){
             <p>8. Jeśli cztery pola w danym towarze są puste to znaczy że nikt jeszcze nie sprawdzxał jego stanu</p>
             <p>9. Możesz dodać i usunąć towar wybierając najpierw kategorię a później ustawiając odpowiednio check-boxy</p>
             <p>10. Zablokowanie arkusza jest możliwe pod przyciskiem "Zablokuj"
-                (UWAGA! nie ma możliwości późniejszego powrotu do arkusza w celu bezpieczeństwa i brak ingerencji osób 3)</p>
+                (UWAGA! nie ma możliwości późniejszego powrotu do arkusza w celu bezpieczeństwa i brak ingerencji osób trzecich)</p>
 
-            <h3>Życzymy miłego użytkowania w razie problemów zapraszamy do kontaktu. JunSOFT Company</h3>
+            <h3>Życzymy miłego użytkowania w razie problemów zapraszamy do kontaktu. JunSOFT Company <i class="icon-emo-thumbsup"></i> </h3>
 
         </div>
         <div style="clear: both" ></div>

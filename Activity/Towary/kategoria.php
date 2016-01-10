@@ -34,14 +34,14 @@ if(!isset($_COOKIE['id_magazyn']) && $_COOKIE['id_magazyn'] == null){
 }
 
 
-function displayKategoria($idKat, $nazwa, $opis)
+function displayKategoria($idKat, $nazwa)
 {
     echo '<div class="col-lg-4">';
     echo '<a href="towaryMagazyn.php" onclick="sprawdzKategoria(' . $idKat . ');" class="tilelink">';
         echo '<div class="kategoriaTile" >';
 
             echo '<div style="text-align: center;">';
-            echo '<i class="icon-home"></i> <br/>';
+            echo '<i class="icon-box"></i> <br/>';
             echo $nazwa . "<br/>";
             echo '</div>';
 
@@ -102,9 +102,8 @@ function displayKategoria($idKat, $nazwa, $opis)
     include('../leftPanel.php');
     ?>
 
-    <div style="float:right; width: 70%; background-color: #fffc26;">
+    <div style="float:right; width: 70%;">
 
-        <p style="text-align: center; font-size: 180%; padding-top: 10px; color: #0f0f0f">Kategoria</p>
 
         <?php
         $dbconn = getConnection();
@@ -114,7 +113,7 @@ function displayKategoria($idKat, $nazwa, $opis)
         if ($count>0) {
             echo '<div class="row">';
             for ($iter = 0; $wierszKategoria = mysqli_fetch_array($result);) {
-                displayKategoria($wierszKategoria['kt_id'], $wierszKategoria['kt_nazwa'], $wierszKategoria['kt_opis']);
+                displayKategoria($wierszKategoria['kt_id'], $wierszKategoria['kt_nazwa']);
 
 
                 //displayKategoria($wierszKategoria['kt_id'], $wierszKategoria['kt_nazwa'], $wierszKategoria['kt_opis']);
@@ -135,6 +134,35 @@ function displayKategoria($idKat, $nazwa, $opis)
 
 
         ?>
+
+        <!-- Trigger the modal with a button -->
+        <button style="float: right; margin: 15px;" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Dodaj kategorie</button>
+
+        <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h2 class="modal-title">Nowa Kategoria</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p>Wprowadź dane:</p>
+                        <form action="addKategoriaToDB.php" method="post">
+                            Nazwa: <input type="text" maxlength="28" name="nazwa" required  /> <br>
+                            Opis(opcjonalnie): <input type="text" name="opis" /> <br>
+                            <input style="float: right; margin: 10px;" type="submit" class="btn btn-default" value="Dodaj"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
 
     </div>

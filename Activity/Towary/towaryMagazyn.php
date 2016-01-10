@@ -69,7 +69,7 @@ function displayCommodity($nr, $idTow, $idTowarArkusz, $name, $bareCode, $date, 
         //TODO cos to zle wyswietla...
         echo '<td> <div class="delete" onclick="deleteCommodity(' . $idTow . ');" >' ;
         echo '<a href="javascript: void(0)" class="tilelink">';
-        echo '<i class="icon-plus"></i>';
+        echo '<i class="icon-trash-empty"></i>';
         echo '</a>';
         echo '</div> </td>';
 
@@ -189,7 +189,7 @@ function checkWhichCheckBoxesAreSelected()
     include('../leftPanel.php');
     ?>
 
-    <div style="float:right; width: 70%; background-color: #fffc26;" >
+    <div style="float:right; width: 70%;" >
 
         <a id="sekcja_gora"></a>
 
@@ -222,6 +222,8 @@ function checkWhichCheckBoxesAreSelected()
                 if ($count>0) {
                     if (isset($_COOKIE['opcja_wyboru_towarow']) && $_COOKIE['opcja_wyboru_towarow'] == true) {
                         echo '<form action="towaryArkusz.php" method="post">';
+                        echo '<input type="hidden" name="wybraneTowary[]" value="bar" />';
+                        /*'<input type="checkbox" name="wybraneTowary[]" value="' . $idTow . '" checked >';*/
                     }
 
                     for ($iter = 0; $wierszTowar = mysqli_fetch_array($result); $iter++) {
@@ -230,8 +232,8 @@ function checkWhichCheckBoxesAreSelected()
                     }
 
                     if (isset($_COOKIE['opcja_wyboru_towarow']) && $_COOKIE['opcja_wyboru_towarow'] == true) {
-                        /*echo '<script type="text/javascript">' . 'delete_cookie(\'opcja_wyboru_towarow\');'
-                            . '</script>';*/
+                        echo '<script type="text/javascript">' . 'delete_cookie(\'opcja_wyboru_towarow\');'
+                            . '</script>';
 
                         echo '<input  type="submit" style="margin: 10px; margin-right: 25px; color: #fff; background-color: #31b0d5; border-color: #269abc;" class="btn btn-default" value="Wybieram!"/>';
                     echo '</form>';
@@ -251,7 +253,7 @@ function checkWhichCheckBoxesAreSelected()
 
         </div>
 
-        <a style="float: left; margin: 15px;" type="button" class="btn btn-info btn-lg" href="#sekcja_gora">W górę</a>
+        <a style="float: left; margin: 15px;" type="button" class="btn btn-info btn-lg icon-up" href="#sekcja_gora"></a>
 
         <!-- Trigger the modal with a button -->
         <button style="float: right; margin: 15px;" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Dodaj towar</button>

@@ -50,8 +50,9 @@ function displayArkuszSpisowy($idArk, $numer, $czyZablokowany, $arkDataRozpoczę
         echo '<a href="../Towary/towaryArkusz.php" onclick="sprawdzArkusz(' . $idArk . ');" class="tilelink">';
         echo '<div class="arkuszSpisowyTileWithHover" >';
     }
-            echo '<div style="float: left; width: 40%">';
-                echo 'ZDJECIE: ' . $numer . "<br/>";
+            echo '<div style="float: left; width: 40%; text-align: center;">';
+                echo '<i class="icon-doc-text"></i> <br/>';
+                echo $numer . "<br/>";
             echo '</div>';
 
             echo '<div style="float: right; width: 60%; position: relative">';
@@ -69,7 +70,7 @@ function displayArkuszSpisowy($idArk, $numer, $czyZablokowany, $arkDataRozpoczę
 
                 echo '<div onclick="deleteArkuszSpisowy(\''.$numer.'\');" class="delete">' ;
                     echo '<a href="javascript: void(0)" class="tilelink">';
-                    echo '<i class="icon-plus"></i> <br/>';
+                    echo '<i style="font-size: 50px;" class="icon-trash-empty"></i> <br/>';
                     echo '</a>';
                 echo '</div>';
 
@@ -160,7 +161,7 @@ function displayArkuszSpisowy($idArk, $numer, $czyZablokowany, $arkDataRozpoczę
     include('../leftPanel.php');
     ?>
 
-    <div style="float:right; width: 70%; background-color: #fffc26;" >
+    <div style="float:right; width: 70%;" >
 
         <?php
         $dbconn = getConnection();

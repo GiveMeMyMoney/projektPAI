@@ -1,12 +1,13 @@
 .kategoriaTile
 {
     background-color: #0bff0c;
-    margin: 15px 45px;
+    margin: 15px;
+    margin-left: 45px;
     overflow: auto;
     padding-top: 5px;
     padding-left: 2%;
     text-align: center;
-    box-shadow: 10px 10px 5px #888888;
+    box-shadow: 5px 5px 2px #858585;
     border-radius: 15px;
     line-height: 140%;
 }

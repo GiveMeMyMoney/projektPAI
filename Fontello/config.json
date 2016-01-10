@@ -43,6 +43,12 @@
       "src": "fontawesome"
     },
     {
+      "uid": "5408be43f7c42bccee419c6be53fdef5",
+      "css": "doc-text",
+      "code": 59410,
+      "src": "fontawesome"
+    },
+    {
       "uid": "cddbeffea9d90c5db93d5d3e77b8893e",
       "css": "cart-plus",
       "code": 59401,
@@ -76,6 +82,12 @@
       "uid": "513ac180ff85bd275f2b736720cbbf5e",
       "css": "home-1",
       "code": 59408,
+      "src": "entypo"
+    },
+    {
+      "uid": "cc05df515bebe11df3ada0a5910a8f6d",
+      "css": "box",
+      "code": 59411,
       "src": "entypo"
     },
     {

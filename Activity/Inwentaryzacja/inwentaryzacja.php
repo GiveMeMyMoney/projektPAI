@@ -51,7 +51,7 @@ function displayArkuszInwentaryzacji($idInw, $numer, $opis)
 
                 echo '<div onclick="deleteInwentaryzacja(\''.$numer.'\');" class="delete">' ;
                     echo '<a href="javascript: void(0)" class="tilelink">';
-                    echo '<i class="icon-plus"></i> <br/>';
+                    echo '<i style="font-size: 50px;" class="icon-trash-empty"></i> <br/>';
                     echo '</a>';
                 echo '</div>';
 
@@ -140,7 +140,7 @@ function displayArkuszInwentaryzacji($idInw, $numer, $opis)
     include('../leftPanel.php');
     ?>
 
-    <div style="float:right; width: 70%; background-color: #fffc26;" >
+    <div style="float:right; width: 70%;" >
 
         <?php
             $dbconn = getConnection();

@@ -1,16 +1,17 @@
 body
 {
-    background-color: rgba(9, 5, 23, 0.98);
+    background-color: rgba(198, 196, 210, 0.98);
     font-family: 'Lato', sans-serif;
     font-size: 20px;
 }
 
 #container
 {
-    background-color: #7c0010;
+    background-color: #cb0011;
     width: 850px;
     margin-left: auto;
     margin-right: auto;
+    box-shadow: 5px 5px 5px #7c0010;
 }
 
 .rectangle
@@ -18,7 +19,7 @@ body
     width: 830px;
 }
 
-#rectangleBottom
+.rectangleBottom
 {
     text-align: center;
     width: 830px;
@@ -37,6 +38,7 @@ body
     font-size: 60px;
     font-family: 'Josefin Sans', sans-serif;
     text-align: center;
+    text-shadow: 2px 2px 5px #636363;
 }
 
 .tile1

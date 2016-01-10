@@ -1,12 +1,12 @@
 .arkuszSpisowyTileWithHover
 {
-    background-color: #33ff12;
-    margin: 15px 35px;
-    height: 125px;
+    background-color: #33f812;
+    margin: 15px 45px;
+    overflow: auto;
     padding-top: 10px;
     text-align: left;
     border-radius: 15px;
-    box-shadow: 10px 10px 5px #888888;
+    box-shadow: 5px 5px 2px #858585;
     line-height: 150%;
 }
 
@@ -19,7 +19,7 @@
 {
     background-color: #33ff12;
     margin: 15px 35px;
-    height: 125px;
+    overflow: auto;
     padding-top: 10px;
     text-align: left;
     border-radius: 15px;
@@ -30,19 +30,18 @@
 .delete
 {
     position: absolute;
-    bottom: 0;
-    right: 10px;
+    bottom: 5px;
+    right: 0px;
     padding: 5px;
 }
 
 .delete:hover
 {
-    font-size: 130%;
+    font-size: 60px;
 }
 
 a.tilelink
 {
-    color: #333333;
     text-decoration: none;
 }
 

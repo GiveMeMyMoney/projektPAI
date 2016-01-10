@@ -53,7 +53,7 @@ function displayWarehouse($idMag, $name, $shortName, $phone, $resort, $street, $
 
                 echo '<div onclick="deleteWarehouse(\''.$name.'\');" class="delete">' ;
                     echo '<a href="javascript: void(0)" class="tilelink">';
-                    echo '<i class="icon-plus"></i> <br/>';
+                    echo '<i style="font-size: 50px;" class="icon-trash-empty"></i> <br/>';
                     echo '</a>';
                 echo '</div>';
 
@@ -77,8 +77,15 @@ function displayWarehouse($idMag, $name, $shortName, $phone, $resort, $street, $
     <script src="../../zPomocnicze/prototype.js" > </script>
     <script>
         function sprawdzMagazyn(idMag) {
-            var cookie_name = 'id_magazyn';
-            create_cookie(cookie_name, idMag, 30, "/");
+            try {
+                if (idMag < 0) {
+                    throw("cos nie tak z BD!");
+                }
+                var cookie_name = 'id_magazyn';
+                create_cookie(cookie_name, idMag, 30, "/");
+            } catch (e) {
+                alert("Error: " + e);
+            }
         }
 
         function deleteWarehouse(name) {
@@ -132,15 +139,25 @@ function displayWarehouse($idMag, $name, $shortName, $phone, $resort, $street, $
     include('../leftPanel.php');
     ?>
 
-    <div style="float:right; width: 70%; background-color: #fffc26;" >
+    <div style="float:right; width: 70%;" >
             <?php
                 $dbconn = getConnection();
                 $result = mysqli_query($dbconn, "SELECT * FROM magazyn;");
 
-            while ($wierszMagazyn = mysqli_fetch_array($result)) {
-                displayWarehouse($wierszMagazyn['mag_id'], $wierszMagazyn['mag_nazwa'], $wierszMagazyn['mag_skrot'], $wierszMagazyn['mag_telefon'],
-                    $wierszMagazyn['mag_miejscowosc'], $wierszMagazyn['mag_ulica'], $wierszMagazyn['mag_nr']);
+            $count = $result->num_rows;
+
+            if ($count>0) {
+                while ($wierszMagazyn = mysqli_fetch_array($result)) {
+                    displayWarehouse($wierszMagazyn['mag_id'], $wierszMagazyn['mag_nazwa'], $wierszMagazyn['mag_skrot'], $wierszMagazyn['mag_telefon'],
+                        $wierszMagazyn['mag_miejscowosc'], $wierszMagazyn['mag_ulica'], $wierszMagazyn['mag_nr']);
+                }
+            } else {
+                echo '<div style="margin: 20px; color: red">';
+                echo '*Brak aktualnych magazynów';
+                echo '</div>';
             }
+
+
 
             ?>
 

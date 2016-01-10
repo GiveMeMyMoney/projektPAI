@@ -63,6 +63,7 @@ if(isset($_COOKIE['id_arkusza']) && $_COOKIE['id_arkusza'] != null){
 function sprawdzTowary()
 {
     $ilosc = 0;
+    //var_dump("ilosc: " . $ilosc);
     if (isset($_POST['wybraneTowary'])) {
         $dbconn = getConnection();
         mysqli_autocommit($dbconn, false);
@@ -70,17 +71,30 @@ function sprawdzTowary()
         $arrWybraneTowary = $_POST['wybraneTowary'];
         $ilosc = count($arrWybraneTowary);
         $idArk =  $_COOKIE['id_arkusza'];
-        var_dump($idArk);
+        $idKat =  $_COOKIE['id_kategoria'];
+        //var_dump($idArk);
+        //var_dump($idKat);
         try
         {
-            /**
-             * zle zrobiona transakcja do poprawy!
-             */
-            $resultStare = mysqli_fetch_array(mysqli_query($dbconn, "SELECT tow_id FROM towar WHERE tow_ark_id = '$idArk';"));
-            /*while ($resultStare) {
-                var_dump($resultStare['tow_id']);
+            $result = mysqli_query($dbconn, "SELECT tow_id FROM towar WHERE tow_ark_id = '$idArk' AND tow_kat_id='$idKat';");
+            $resultStare = array();
+            while ($row = mysqli_fetch_array($result)) {
+                $resultStare[] = $row[0];
+            }
+            //var_dump($resultStare);
+
+            /*if ($arrWybraneTowary == null) {
+                $rozmiar = count($resultStare);
+                for ($i = 0; $i < $rozmiar; $i++) {
+                    $idTow = $resultStare[$i];
+                    var_dump("Jestem w null: " . $idTow);
+                    $result2 = mysqli_query($dbconn, "UPDATE towar SET tow_ark_id = NULL WHERE tow_id = '$idTow';");
+                    if (!$result2) {
+                        throw new Exception("Error details: " . mysqli_error($dbconn) . ".");
+                    }
+                }
+                return;
             }*/
-            var_dump($resultStare);
             if (false) {
                 throw new Exception("Error details: " . mysqli_error($dbconn) . ".");
             } else {
@@ -89,15 +103,15 @@ function sprawdzTowary()
                     throw new Exception("Error details: " . mysqli_error($dbconn) . ".");
                 } else {
                     $maxTowID = $resultMaxID['tow_id'];
-                    var_dump($maxTowID);
+                    //var_dump($maxTowID);
                     /**
                      * jesli zadne towary NIE byly przypisane do arkusza
                      */
                     if ($resultStare == null) {
-                        var_dump("1 opcja");
+                        //var_dump("1 opcja");
                         for ($idTow = 1; $idTow <= $maxTowID; $idTow++) {
                             if (in_array($idTow, $arrWybraneTowary)) {
-                                var_dump($idTow . ' w 1 opcji zaznaczony');
+                                //var_dump($idTow . ' w 1 opcji zaznaczony');
                                 debug_to_console($idTow . ' w 1 opcji zaznaczony');
 
                                 $resultUpdate = mysqli_query($dbconn, "UPDATE towar SET tow_ark_id = '$idArk' WHERE tow_id = '$idTow';");
@@ -112,20 +126,20 @@ function sprawdzTowary()
                      * jesli jakies towary byly przypisane do arkusza
                      */
                     else {
-                        var_dump("2 opcja");
+                        //var_dump("2 opcja");
                         for ($idTow = 1; $idTow <= $maxTowID; $idTow++) {
                             //te ktore byly zaznaczone
                             if (in_array($idTow, $resultStare)) {
                                 //jesli teraz nie sa = UPDATE
                                 if (!in_array($idTow, $arrWybraneTowary)) {
-                                    var_dump($idTow . ' w 2 opcji odznaczony');
+                                    //var_dump($idTow . ' w 2 opcji odznaczony');
                                     $resultUpdate = mysqli_query($dbconn, "UPDATE towar SET tow_ark_id = NULL WHERE tow_id = '$idTow';");
                                     if (!$resultUpdate) {
                                         throw new Exception("Error details: " . mysqli_error($dbconn) . ".");
                                     }
                                 }
                             } else if (in_array($idTow, $arrWybraneTowary)) {
-                                var_dump($idTow . ' w 2 zaznaczony!');
+                                //var_dump($idTow . ' w 2 zaznaczony!');
                                 debug_to_console($idTow . ' was checked!');
 
                                 $resultUpdate = mysqli_query($dbconn, "UPDATE towar SET tow_ark_id = '$idArk' WHERE tow_id = '$idTow';");
@@ -134,14 +148,7 @@ function sprawdzTowary()
                                 }
                             }
                         }
-
                     }
-
-
-                    /*$result3 = mysqli_query($dbconn, "INSERT INTO magazyn_towar VALUES (NULL, '$idMag', '$result2[tow_id]');");
-                    if (!$result3) {
-                        throw new Exception("Error details: " . mysqli_error($dbconn) . ".");
-                    }*/
                 }
             }
             $dbconn->commit();
@@ -152,19 +159,9 @@ function sprawdzTowary()
             $dbconn->rollback();
             debug_to_console("transakcja zakonczona NIE-powodzeniem: " . $e->getMessage());
         }
-
-        //$dbconn->close();
-        /*if (in_array('5', $arrWybraneTowary)) {
-            echo 5 . ' was checked!';
-        }*/
-
     }
     return $ilosc;
 }
-
-//if(isset($_POST['food']) && in_array(...
-
-
 
 function displayTowar($nr, $idTow, $idStan, $name, $bareCode, $date)
 {
@@ -188,18 +185,21 @@ function displayTowar($nr, $idTow, $idStan, $name, $bareCode, $date)
 
 }
 
-function displayKategoria($idKat, $nazwa, $opis)
+function displayKategoria($idKat, $nazwa)
 {
+    echo '<div class="col-lg-6">';
     echo '<a href="towaryMagazyn.php" onclick="sprawdzKategoria(' . $idKat . ');" class="tilelink">';
     echo '<div class="kategoriaTile" >';
 
-    echo '<div style="float: left; width: 35%; text-align: center;">';
-    echo '<i class="icon-home"></i> <br/>';
+    echo '<div style="text-align: center;">';
+    echo '<i class="icon-box"></i> <br/>';
     echo $nazwa . "<br/>";
     echo '</div>';
 
     echo '</div>';
     echo '</a>';
+    echo '</div>';
+
 }
 
 ?>
@@ -213,15 +213,6 @@ function displayKategoria($idKat, $nazwa, $opis)
     <script type="text/javascript" src="../../cookieScript/cookies.js"></script>
     <script src="../../zPomocnicze/prototype.js" > </script>
     <script>
-        function isDecimalKey(evt)
-        {
-            var charCode = (evt.which) ? evt.which : evt.keyCode;
-            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
-                return false;
-
-            return true;
-        }
-
         function sprawdzKategoria(idKat) {
             var cookie_name = 'id_kategoria';
             create_cookie(cookie_name, idKat, 30, "/");
@@ -246,12 +237,6 @@ function displayKategoria($idKat, $nazwa, $opis)
             }
         }
     </script>
-
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
-
-    <!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
 
     <!--Modal from bootstrap-->
     <link rel="stylesheet" href="../../bootstrap/css/bootstrap.css" type="text/css" >
@@ -282,7 +267,7 @@ function displayKategoria($idKat, $nazwa, $opis)
     include('../leftPanel.php');
     ?>
 
-    <div style="float:right; width: 70%; background-color: #fffc26;" >
+    <div style="float:right; width: 70%; background-color: #5a5966;" >
 
         <button onclick="zablokujArkusz()" style="margin: 15px;" type="button" class="btn btn-info btn-lg">Zablokuj</button>
 
@@ -347,9 +332,17 @@ function displayKategoria($idKat, $nazwa, $opis)
                         $count = $result->num_rows;
 
                         if ($count>0) {
-                            while ($wierszKategoria = mysqli_fetch_array($result)) {
-                                displayKategoria($wierszKategoria['kt_id'], $wierszKategoria['kt_nazwa'], $wierszKategoria['kt_opis']);
+                            echo '<div class="row">';
+                            for ($iter = 0; $wierszKategoria = mysqli_fetch_array($result);) {
+                                displayKategoria($wierszKategoria['kt_id'], $wierszKategoria['kt_nazwa']);
+
+                                $iter++;
+                                if (($iter % 2) == 0) {
+                                    echo '</div><div class="row">';
+                                }
+
                             }
+                            echo '</div>';
                         } else {
                             echo '<div style="margin: 20px; color: red">';
                             echo '*Brak aktualnych kategorii';
